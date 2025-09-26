@@ -4,23 +4,25 @@
 The `hss_vision` package is responsible for all image processing and computer vision tasks within the HSS, including target detection, tracking, classification, and QR code recognition.
 
 ## Functionality
-- **Camera Feed Processing:** Acquires and processes video frames from a ROS 2 topic (`/camera/image_raw`).
+- **Camera Feed Processing:** Acquires and processes video frames from the `/camera/image_raw` topic.
 - **Target Detection and Tracking:** Implements algorithms (e.g., OpenCV, YOLO, TensorRT) to detect and track moving targets within the camera's field of view at >= 15 FPS.
-- **Color Separation (Stage 2):** Identifies and differentiates targets based on color (red for enemy, blue for friendly) for autonomous engagement in `AUTO_KILL_COLOR` mode.
-- **QR Code Detection (Stage 3):** Detects and decodes QR codes displayed at the weapon's zero point for target engagement in `QR_ENGAGE` mode.
-- **Target Information Extraction:** For each detected target, extracts and calculates relevant information such as ID, position, confidence score, and color (if applicable).
-- **Target Data Publication:** Publishes the processed target information, including QR code data, to the `/vision/targets` ROS 2 topic.
-- **RTSP Stream Generation:** Potentially responsible for generating the RTSP video stream for the ground station interface.
+- **Target Information Extraction:** For each detected target, extracts key information as defined in `hss_interfaces/msg/Target`, including 3D position, confidence, color, and any decoded QR code data.
+- **Target Data Publication:** Publishes an array of all detected targets to the `/vision/targets` topic (`hss_interfaces/msg/TargetArray`).
+- **Debug Image Publication:** For validation and visualization, it publishes the processed video stream with detections overlaid to the `/vision/image_processed` topic (`sensor_msgs/msg/Image`).
+- **Color Separation:** Identifies targets by color (e.g., red for enemy) to support the `AUTO_KILL_COLOR` mode.
+- **QR Code Detection:** Detects and decodes QR codes to support the `QR_ENGAGE` mode.
 
 ## Nodes
 
 ### `vision_node.py`
 - **Purpose:** The main node for processing camera frames and performing target detection.
-- **Subscribes to:** `/camera/image_raw` (sensor_msgs/msg/Image)
-- **Publishes to:** `/vision/targets` (hss_interfaces/msg/TargetArray)
-- **Description:** This node receives raw image data, applies vision algorithms to detect targets, and publishes the results for the `hss_op_manager` to use.
+- **Subscribes to:** `/camera/image_raw` (`sensor_msgs/msg/Image`)
+- **Publishes to:** 
+    - `/vision/targets` (`hss_interfaces/msg/TargetArray`)
+    - `/vision/image_processed` (`sensor_msgs/msg/Image`)
+- **Description:** This node receives raw image data, applies vision algorithms to detect targets, and publishes the results for the `hss_op_manager` to use. It also publishes a processed image stream for debugging and visualization in the ground station.
 
 ### `camera_publisher_node.py`
 - **Purpose:** A simulated camera publisher for development and testing.
-- **Publishes to:** `/camera/image_raw` (sensor_msgs/msg/Image)
+- **Publishes to:** `/camera/image_raw` (`sensor_msgs/msg/Image`)
 - **Description:** This node generates a black screen with "SIMULATED CAMERA FEED" text and publishes it at 30 FPS. It allows for testing the vision pipeline without a physical camera attached.
