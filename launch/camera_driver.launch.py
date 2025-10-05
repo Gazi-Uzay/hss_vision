@@ -22,7 +22,7 @@ def generate_launch_description():
 
     profile_arg = DeclareLaunchArgument(
         'profile',
-        default_value='internal',  # dilediğin varsayılan profili seçebilirsin
+        default_value='internal',
         description='Kullanılacak kamera profili (ör. internal, front, down)'
     )
 

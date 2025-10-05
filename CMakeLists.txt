@@ -26,4 +26,8 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(DIRECTORY calib
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_package()

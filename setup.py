@@ -11,6 +11,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['launch/camera_driver.launch.py']),
         ('share/' + package_name + '/config', ['config/camera_profiles.yaml']),
+        ('share/' + package_name + '/calib',  ['hss_vision/calib/internal.yaml']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

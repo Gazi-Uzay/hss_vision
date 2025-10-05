@@ -6,4 +6,4 @@ profiles:
     image_height: 720
     fourcc: MJPG
     frame_id: internal_camera_optical_frame
-    camera_info_url: "~/.ros/calib/internal.yaml"
+    camera_info_url: "package://hss_vision/calib/internal.yaml"
